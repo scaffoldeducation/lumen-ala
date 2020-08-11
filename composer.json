@@ -1,15 +1,15 @@
 {
-    "name": "kiwfy/lumen-ala",
+    "name": "scaffoldeducation/lumen-ala",
     "description": "API Rest Full created in lumen using query builder that auto generate base code for simple crud.",
     "keywords": ["framework", "laravel", "lumen", "crud"],
     "license": "GPL-3.0-only",
     "type": "project",
     "require": {
         "php": "^7.3.0",
-        "kiwfy/jwt-manager-php": "^1.0",
-        "kiwfy/request-service-php": "^1.0",
-        "kiwfy/response-json-php": "^1.0",
-        "kiwfy/ulid-php": "^1.0",
+        "scaffoldeducation/jwt-manager-php": "^1.0",
+        "scaffoldeducation/request-service-php": "^1.0",
+        "scaffoldeducation/response-json-php": "^1.0",
+        "scaffoldeducation/ulid-php": "^1.0",
         "laravel/lumen-framework": "^7.0"
     },
     "require-dev": {
