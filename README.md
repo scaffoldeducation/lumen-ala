@@ -9,7 +9,7 @@ API Rest Full created in lumen using query builder that auto generate base code 
 
 ### Installation
 
-Requires [PHP](https://php.net) 7.2.
+Requires [PHP](https://php.net) 7.3.
 
 Run [Composer](https://getcomposer.org/) to install all dependencies.
 
@@ -37,10 +37,12 @@ Put key value in `APP_KEY` and `JWT_APP_SECRET`.
 
 **You can use `/health/key` uri to generate this keys or use another value if you want.**
 
-Using [Postman](https://www.postman.com/downloads/) to consulting the routes created throw this two files.
+Using [Postman](https://www.postman.com/downloads/) to consulting the routes created and put the new routes.
 
 `lumen_ala.postman_collection.json` 
-`lumen_ala.postman_environment.json` 
+`lumen_ala.postman_environment.json`
+
+Or you can access [Here](http://localhost:8102).
 
 ### Automatic CRUD
 
@@ -50,29 +52,29 @@ For create a new Domain with a complete CRUD use the command:
 php artisan create:domain {YOU_DOMAIN_NAME_HERE}
 ```
 
-This command create another folder in `app/Domains`, new file in routes folder and `database/migrations`
+This command create another folder in `app/Domains`, new file in `routes`, `database/migrations` and `database/seeds` folder.
 
 **If your domain name has 2 words use underline (_) to separate.**
 
-All your test unit and feature about you new domain already created to.
+All your test unit and feature about your new domain already created to.
 
 ### Configure new Domain
 
-- You need to configure your new migrate with your fields and remove de default field created.
-- Open your domain and configure your fields and field ordenations in `app/Domains/YOUR_DOMAIN/Http/Parameters`
+- Configure your migration file in `database/migrations`
+- Open your domain and configure your fields and the ordenations in `app/Domains/YOUR_DOMAIN/Http/Parameters`
 - Your validator rules in `app/Domains/YOUR_DOMAIN/Http/Validators`
 - All your businesses you put in `app/Domains/YOUR_DOMAIN/Businesses`
-- Your route is put in `bootstrap/list_routes` folder
+- Your routes in `bootstrap/{YOUR_DOMAIN}_routes` folder
 
 ### Ulid
 
-When you use the add (insert) route, for default this project use [Ulid](https://github.com/kiwfy/ulid-php) value in ID.
+For primary key value, this project using [Ulid](https://github.com/kiwfy/ulid-php) value, but you can pass other pattern in Insert route if you don't want to use this type of value.
 
-You can use the validate reserved word `ulid` to validate if the value pass is correct in validator folder.
+You can use the validate reserved word `ulid` in `app/Domains/YOUR_DOMAIN/Http/Validators` folder. Config in `app/Providers/AppServiceProvider.php`
 
 For example:
 
-```
+```php
 /**
  * get rules for this request
  * @return array
@@ -87,7 +89,21 @@ public function getRules(): array
 
 ### JWT
 
-In auth route this projet use [JWT](https://github.com/kiwfy/jwt-manager-php) lib.
+In auth route this projet use [JWT](https://github.com/kiwfy/jwt-manager-php) lib. This token will be generate if your secret, token and context is correct. This configuration stay in [Config](https://github.com/kiwfy/lumen-ala/blob/master/config/token.php) folder.
+
+```php
+return [
+    'data' => [
+        //Token
+        '32c5a206ee876f4c6e1c483457561dbed02a531a89b380c3298bb131a844ac3c' => [
+            // Context
+            'name' => 'app-test',
+            // Secret
+            'secret' => 'a1c5930d778e632c6684945ca15bcf3c752d17502d4cfbd1184024be6de14540',
+        ],
+    ],
+];
+```
 
 ### Request Service
 
@@ -104,7 +120,8 @@ Follow this steps to configure a new field to accepted a filter in list route
 - In validator folder `app/Domains/YOUR_DOMAIN/Http/Validators` configure de list rules `{YOU_DOMAIN_NAME}ListValidator`. For example:
 
 Configure a `name` field.
-```
+
+```php
 /**
  * get rules for this request
  * @return array
@@ -127,7 +144,7 @@ The parameter accept equal, not equal and like query.
 
 **To see another types look at `FiltersTypesConstants` class in `app/Constants`.**
 
-```
+```php
 /**
  * set filter rules for this domain
  */
@@ -161,9 +178,9 @@ public $filter = [
 ];
 ```
 
-After you can send this param in url query, for example:
+After that you can send this param in url query, for example:
 
-`/{YOUR_DOMAIN}/list?filter_name=lik,fred` OR `/{YOUR_DOMAIN}/list?filter_name=eql,fred`.
+`/{YOUR_DOMAIN}/list?filter_name=lik,vitor` OR `/{YOUR_DOMAIN}/list?filter_name=eql,vitor`.
 
 **To see the reservate works look at `FiltersTypesConstants` class in `app/Constants`.**
 
@@ -175,9 +192,23 @@ In this way you can use all database maturity with as fast as possible.
 
 Use [Clear Linux](https://clearlinux.org/) image in your PHP container to get more 50% speed and 50% less memory.
 
+### Database Cache (Beta)
+
+For more speed you can use this beta function and cache all database results. This feature reduced by an average of 5ms per request (using little database).
+
+To using this feature it's necessary to change de Base repository for `BaseRepositoryCache.php` (`app/Repositories/BaseRepositoryCache.php`)
+
+```
+DB_CACHE=true
+DB_CACHE_HOST=lumen-ala-redis
+DB_CACHE_PORT=6379
+```
+
 ### Production
 
 Don't forget to change `APP_ENV` to `production` value. Don't use that in develop mode because this parameter cache all your project.
+
+The production docker is located in `docker/prod` and you can change the Nginx config or PHP if you want.
 
 ### Development
 
@@ -190,6 +221,7 @@ Make a change in your file and be careful with your updates!
 To ensure that the entire project is fine:
 
 First install all the dev dependences
+
 ```sh
 composer install --dev --prefer-dist
 ```

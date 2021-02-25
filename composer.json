@@ -6,10 +6,11 @@
     "type": "project",
     "require": {
         "php": "^7.3.0",
-        "scaffoldeducation/jwt-manager-php": "^1.0",
-        "scaffoldeducation/request-service-php": "^1.0",
-        "scaffoldeducation/response-json-php": "^1.0",
-        "scaffoldeducation/ulid-php": "^1.0",
+        "kiwfy/database-cache-php": "^1.0",
+        "kiwfy/jwt-manager-php": "^1.0",
+        "kiwfy/request-service-php": "^1.0",
+        "kiwfy/response-json-php": "^1.0",
+        "kiwfy/ulid-php": "^1.0",
         "laravel/lumen-framework": "^7.0"
     },
     "require-dev": {
